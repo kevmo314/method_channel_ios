@@ -1,4 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import './isolate.dart';
 
 void main() {
   runApp(const MyApp());
@@ -112,6 +117,22 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            TextButton(
+                onPressed: () {
+                  const MethodChannel('com.example.method_channel_ios/caller')
+                      .invokeMethod('start', {
+                    'callbackHandle':
+                        PluginUtilities.getCallbackHandle(isolateEntryPoint)
+                            ?.toRawHandle(),
+                  });
+                },
+                child: const Text("Start")),
+            TextButton(
+                onPressed: () {
+                  const MethodChannel('com.example.method_channel_ios/caller')
+                      .invokeMethod('trigger');
+                },
+                child: const Text("Trigger")),
           ],
         ),
       ),
